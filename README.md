@@ -1,10 +1,13 @@
 # 🎯 ShuaShuaShua - 在线刷题平台
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![React](https://img.shields.io/badge/react-19.2.1-blue.svg)
-![TypeScript](https://img.shields.io/badge/typescript-5.8.2-blue.svg)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://mit-license.org/)
+[![React](https://img.shields.io/badge/react-19.2.1-blue.svg)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/typescript-5.8.2-blue.svg)](https://www.typescriptlang.org/)
 
 一个在线刷题平台，支持动态题目管理、多种答题模式和实时成绩统计。采用 **React + TypeScript + Supabase** 架构，所有题目数据存储在云数据库。
+
+## AI 声明
+本项目部分代码/文档由 AI 工具 Google Ai Studio 辅助生成，所有内容已通过人工审核，核心逻辑由人工开发，遵循 MIT 许可证。
 
 ## ✨ 核心功能
 
@@ -30,7 +33,7 @@
 ### 前置要求
 - Node.js 18+
 - npm 或 yarn
-- Supabase 账户（数据库）
+- Supabase 账户
 
 ### 安装步骤
 
@@ -51,6 +54,9 @@ npm install
 ```env
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+另外加入管理员密码用于删除题库：
+```
 VITE_ADMIN_PASSWORD=admin123
 ```
 
@@ -105,24 +111,25 @@ npm run dev
 ```
 ShuaShuaShua/
 ├── pages/
-│   ├── Home.tsx          # 首页
-│   ├── Setup.tsx         # 题目配置界面
-│   ├── Quiz.tsx          # 答题界面
-│   └── Admin.tsx         # 后台
+│   ├── Home.tsx           # 首页
+│   ├── Setup.tsx          # 题目配置界面
+│   ├── Quiz.tsx           # 答题界面
+│   └── Admin.tsx          # 后台
 ├── services/
-│   ├── supabaseClient.ts # Supabase 客户端
-│   ├── questionService.ts# 题目 API 操作
-│   └── categoryService.ts# 类别 API 操作
-├── App.tsx               # 应用入口和全局状态
-├── types.ts              # TypeScript 类型定义
-├── utils.ts              # 工具函数
-└── index.tsx             # React 渲染入口
+│   ├── supabaseClient.ts  # Supabase 客户端
+│   ├── questionService.ts # 题目 API 操作
+│   └── categoryService.ts # 类别 API 操作
+├── App.tsx                # 应用入口和全局状态
+├── types.ts               # TypeScript 类型定义
+├── utils.ts               # 工具函数
+└── index.tsx              # React 渲染入口
 ```
 
 ## 💻 技术栈
 
 | 技术 | 版本 | 用途 |
 |------|------|------|
+| Node | 24.11.1 | 运行环境 |
 | React | 19.2.1 | UI 框架 |
 | TypeScript | 5.8.2 | 类型检查 |
 | Vite | 6.2.0 | 构建工具 |
@@ -211,7 +218,7 @@ CREATE TABLE questions (
 - [ ] 题目导入导出
 
 ## 🤝 贡献指南
-·
+
 欢迎提交 Issue 和 Pull Request 😊~
 
 1. Fork 本仓库
