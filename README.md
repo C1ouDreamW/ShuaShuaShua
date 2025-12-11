@@ -40,7 +40,7 @@
 1. **克隆仓库**
 ```bash
 git clone https://github.com/C1ouDreamW/ShuaShuaShua.git
-cd neuroquiz-ai
+cd ShuaShuaShua
 ```
 
 2. **安装依赖**
