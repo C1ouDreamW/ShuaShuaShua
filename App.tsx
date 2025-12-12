@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
-import { Layout, CheckCircle, BrainCircuit, Loader, SquarePen, Pen } from 'lucide-react';
+import { Layout, CheckCircle, BrainCircuit, Loader, SquarePen, Pen, Home as HomeIcon } from 'lucide-react';
 import Home from './pages/Home';
 import QuizSetup from './pages/Setup';
 import QuizPage from './pages/Quiz';
 import AdminDashboard from './pages/Admin';
+import Footer from './components/Footer';
 import { Question, Category } from './types';
 import { questionService } from './services/questionService';
 import { categoryService } from './services/categoryService';
@@ -45,9 +46,20 @@ const Navbar = () => {
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex items-center cursor-pointer" onClick={() => window.location.hash = '#'}>
-            <SquarePen className="h-8 w-8 text-indigo-600 mr-2" />
-            <span className="font-bold text-xl text-gray-900 tracking-tight">ShuaShuaShua</span>
+          <div className="flex items-center gap-4">
+            <a
+              href="https://heycloudream.cn"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-8 h-8 text-gray-600 hover:text-indigo-600 transition-colors rounded-lg hover:bg-indigo-50"
+              title="返回个人主页"
+            >
+              <HomeIcon className="h-5 w-5" />
+            </a>
+            <div className="flex items-center cursor-pointer" onClick={() => window.location.hash = '#'}>
+              <SquarePen className="h-8 w-8 text-indigo-600 mr-2" />
+              <span className="font-bold text-xl text-gray-900 tracking-tight">ShuaShuaShua</span>
+            </div>
           </div>
           <div className="flex items-center space-x-4">
             <Link
@@ -172,9 +184,9 @@ export default function App() {
       refreshCategories
     }}>
       <Router>
-        <div className="min-h-screen bg-gray-50 text-gray-900">
+        <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col">
           <Navbar />
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/setup/:topicId" element={<QuizSetup />} />
@@ -183,6 +195,7 @@ export default function App() {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
+          <Footer />
         </div>
       </Router>
     </QuizContext.Provider>
