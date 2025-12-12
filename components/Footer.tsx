@@ -7,7 +7,7 @@ export default function Footer() {
             href="https://beian.miit.gov.cn/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-base text-gray-500 hover:text-indigo-600 transition-colors"
+            className="text-sm text-gray-500 hover:text-indigo-600 transition-colors"
           >
             豫ICP备2025156751号
           </a>
