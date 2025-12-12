@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { QuizContext } from '../App';
 import { Question, QuestionType, Option, Category } from '../types';
 import { generateId } from '../utils';
@@ -8,6 +8,13 @@ import * as Icons from 'lucide-react';
 export default function AdminDashboard() {
   const { adminQuestions, addAdminQuestion, deleteAdminQuestion, loadingAdminQuestions, categories, addCategory, deleteCategory, loadingCategories } = useContext(QuizContext);
   const [activeTab, setActiveTab] = useState<'create' | 'list' | 'category'>('create');
+
+  // 管理员认证状态
+  const [adminAuthenticated, setAdminAuthenticated] = useState<boolean>(false);
+  const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
+  const [authPassword, setAuthPassword] = useState<string>('');
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [authLoading, setAuthLoading] = useState<boolean>(false);
 
   // 题目表格
   const [questionText, setQuestionText] = useState('');
@@ -31,6 +38,38 @@ export default function AdminDashboard() {
   const [deletePassword, setDeletePassword] = useState('');
   const [deletePasswordError, setDeletePasswordError] = useState<string | null>(null);
   const [isDeletingCategory, setIsDeletingCategory] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('admin_authenticated') === 'true';
+    if (stored) {
+      setAdminAuthenticated(true);
+      setShowAuthModal(false);
+    } else {
+      setAdminAuthenticated(false);
+      setShowAuthModal(true);
+    }
+  }, []);
+
+  const handleConfirmAuth = () => {
+    setAuthLoading(true);
+    const adminPassword = process.env.VITE_ADMIN_PASSWORD || '';
+    if (authPassword === adminPassword && adminPassword !== '') {
+      localStorage.setItem('admin_authenticated', 'true');
+      setAdminAuthenticated(true);
+      setShowAuthModal(false);
+      setAuthError(null);
+      setAuthPassword('');
+    } else {
+      setAuthError('密码错误，请重试');
+    }
+    setAuthLoading(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('admin_authenticated');
+    setAdminAuthenticated(false);
+    setShowAuthModal(true);
+  };
 
   const ICON_OPTIONS = [
     { name: 'Cpu', label: '芯片' },
@@ -206,14 +245,72 @@ export default function AdminDashboard() {
     setDeletePasswordModal({ visible: false });
     setDeletePassword('');
   };
+  if (!adminAuthenticated) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-2xl shadow-xl p-6 max-w-md w-full mx-4">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+              <Lock className="w-5 h-5 text-yellow-600" /> 管理员登录
+            </h3>
+          </div>
+
+          <p className="text-sm text-gray-600 mb-4">请输入管理员密码以进入后台。</p>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">管理员密码</label>
+            <input
+              type="password"
+              value={authPassword}
+              onChange={(e) => setAuthPassword(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleConfirmAuth()}
+              placeholder="请输入管理员密码"
+              className="w-full border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 border p-2"
+              autoFocus
+            />
+          </div>
+
+          {authError && (
+            <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100 mb-4">
+              {authError}
+            </div>
+          )}
+
+          <div className="flex gap-3">
+            <button
+              onClick={() => (window.location.href = '/')}
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium"
+            >
+              返回首页
+            </button>
+            <button
+              onClick={handleConfirmAuth}
+              disabled={!authPassword || authLoading}
+              className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {authLoading ? '验证中...' : '确认'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       {/* 导航栏 */}
       <div className="lg:col-span-1">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="p-4 bg-gray-50 border-b border-gray-200">
+          <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
             <h3 className="font-bold text-gray-700">管理员面板</h3>
+            <div>
+              <button
+                onClick={handleLogout}
+                className="text-sm text-gray-600 hover:text-gray-800 px-3 py-1 rounded-md border border-gray-200"
+              >
+                退出
+              </button>
+            </div>
           </div>
           <nav className="p-2 space-y-1">
             <button
